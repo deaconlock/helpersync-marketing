@@ -1,0 +1,30 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["39GND5DX3K.com.helpersync.app"],
+        "components": [
+          {
+            "/": "/join/*",
+            "comment": "Helper PIN join links"
+          },
+          {
+            "/": "/invite/*",
+            "comment": "Magic-link household invites"
+          },
+          {
+            "/": "/onboarding/*",
+            "comment": "Resume onboarding deep links"
+          },
+          {
+            "/": "/dashboard/*",
+            "comment": "Open specific task / day from external link"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["39GND5DX3K.com.helpersync.app"]
+  }
+}
