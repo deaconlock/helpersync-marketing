@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HelperSync — The home runs itself. You don't have to.</title>
-  <meta name="description" content="HelperSync helps Singapore households build a personalised weekly schedule for their domestic helper. Plan by voice. Share in her language. Track with photos." />
-  <meta property="og:title" content="HelperSync — Household task coordination for Singapore" />
-  <meta property="og:description" content="Take 10+ workdays off your plate. Built for Singapore households." />
+  <meta name="description" content="HelperSync builds your domestic helper's week around what matters, sends it to her on WhatsApp in her own language, and shows you each task ticked off with a photo. Built for Singapore households." />
+  <meta property="og:title" content="HelperSync — Household coordination for Singapore" />
+  <meta property="og:description" content="Set the week once. She gets it on WhatsApp in her language. You see each task done, with a photo. Built for Singapore households." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://helper-sync.com" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%A0%3C/text%3E%3C/svg%3E" />
@@ -38,10 +38,16 @@
       /* Signature gradient — teal → cyan */
       --brand-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 45%, #06b6d4 100%);
 
+      /* WhatsApp */
+      --wa-header: #075E54;
+      --wa-bg: #E7DED6;
+      --wa-bubble: #FFFFFF;
+
       /* Shadows */
       --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.04), 0 1px 2px -1px rgba(0,0,0,0.03);
       --shadow-card-hover: 0 4px 12px 0 rgba(0,0,0,0.06);
       --shadow-card-elevated: 0 10px 30px rgba(0,0,0,0.06);
+      --shadow-phone: 0 30px 60px -20px rgba(13,148,136,0.28), 0 12px 24px -12px rgba(0,0,0,0.18);
 
       --ease-opal: cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -112,6 +118,7 @@
     }
     nav a:hover { color: var(--gray-900); }
     nav .links { display: flex; gap: 1.75rem; align-items: center; }
+    @media (max-width: 560px) { nav .links a.nav-hide { display: none; } }
 
     /* Buttons */
     .btn {
@@ -145,7 +152,7 @@
 
     /* HERO */
     .hero {
-      padding: 7rem 2rem 5rem;
+      padding: 7rem 2rem 4rem;
       text-align: center;
       position: relative;
     }
@@ -158,9 +165,24 @@
       color: var(--primary);
       margin-bottom: 1.25rem;
     }
+    .eyebrow .dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--primary-500);
+      margin-right: 0.4rem;
+      vertical-align: middle;
+      box-shadow: 0 0 0 0 rgba(20,184,166,0.6);
+      animation: pulse-dot 2s var(--ease-opal) infinite;
+    }
+    @keyframes pulse-dot {
+      0%   { box-shadow: 0 0 0 0 rgba(20,184,166,0.5); }
+      70%  { box-shadow: 0 0 0 7px rgba(20,184,166,0); }
+      100% { box-shadow: 0 0 0 0 rgba(20,184,166,0); }
+    }
     h1.hero-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(2rem, 5.5vw, 3rem); /* text-3xl → text-5xl-ish */
+      font-size: clamp(2rem, 5.5vw, 3rem);
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.15;
@@ -177,7 +199,7 @@
     .hero-sub {
       font-size: 1.125rem;
       line-height: 1.65;
-      max-width: 560px;
+      max-width: 580px;
       margin: 0 auto 2.5rem;
       color: var(--gray-500);
     }
@@ -190,14 +212,14 @@
 
     /* Big-number reveal section */
     .reality {
-      padding: 6rem 2rem;
+      padding: 5.5rem 2rem;
       text-align: center;
       background: var(--background);
     }
     .reality-inner { max-width: 720px; margin: 0 auto; }
     .big-number {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(3.75rem, 11vw, 4.5rem); /* text-6xl → text-7xl */
+      font-size: clamp(3.75rem, 11vw, 4.5rem);
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.1;
@@ -230,7 +252,7 @@
 
     h2.section-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(1.5rem, 4vw, 1.875rem); /* text-2xl → text-3xl */
+      font-size: clamp(1.5rem, 4vw, 1.875rem);
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.2;
@@ -244,6 +266,141 @@
       max-width: 600px;
     }
 
+    /* HOW IT WORKS — the loop */
+    .how { background: var(--surface); border-top: 1px solid var(--border); }
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3.5rem;
+    }
+    @media (max-width: 880px) {
+      .how-grid { grid-template-columns: 1fr; gap: 3rem; justify-items: center; }
+      .how-steps { order: 2; }
+      .phone-wrap { order: 1; }
+    }
+    .how-steps { display: flex; flex-direction: column; gap: 1.75rem; max-width: 460px; }
+    .step { display: flex; gap: 1.125rem; align-items: flex-start; }
+    .step-num {
+      flex: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--primary-50);
+      color: var(--primary-700);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--primary-100);
+    }
+    .step h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--gray-900);
+      margin-bottom: 0.3rem;
+    }
+    .step p { color: var(--gray-500); font-size: 0.95rem; line-height: 1.6; }
+
+    /* PHONE MOCK (WhatsApp) */
+    .phone-wrap { display: flex; justify-content: center; }
+    .phone {
+      width: 300px;
+      background: #0b0b0d;
+      border-radius: 38px;
+      padding: 11px;
+      box-shadow: var(--shadow-phone);
+    }
+    .phone-screen {
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--wa-bg);
+      position: relative;
+    }
+    .wa-header {
+      background: var(--wa-header);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 0.85rem;
+    }
+    .wa-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .wa-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 0.9rem; line-height: 1.2; }
+    .wa-status { font-size: 0.68rem; opacity: 0.8; }
+    .wa-body {
+      padding: 0.85rem 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 430px;
+    }
+    .bubble {
+      background: var(--wa-bubble);
+      border-radius: 10px;
+      border-top-left-radius: 2px;
+      padding: 0.6rem 0.7rem;
+      max-width: 92%;
+      box-shadow: 0 1px 0.5px rgba(0,0,0,0.08);
+      font-size: 0.8rem;
+      color: #1f2b28;
+      line-height: 1.45;
+    }
+    .bubble .time { font-size: 0.62rem; color: #98a3a0; float: right; margin: 0.35rem 0 0 0.5rem; }
+    .bubble.intro strong { font-weight: 600; }
+    .checklist { display: flex; flex-direction: column; gap: 0.15rem; margin-top: 0.15rem; }
+    .list-title { font-size: 0.72rem; color: #5b6763; margin-bottom: 0.35rem; }
+    .task {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.32rem 0;
+      border-top: 1px solid #f0f1ee;
+    }
+    .task:first-of-type { border-top: none; }
+    .tick {
+      flex: none;
+      width: 17px; height: 17px;
+      border-radius: 50%;
+      border: 1.5px solid #cfd6d3;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; color: transparent;
+    }
+    .task.done .tick { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .task .t-name { flex: 1; font-size: 0.76rem; color: #26322f; }
+    .task.done .t-name { color: #5b6763; }
+    .task .t-time { font-size: 0.68rem; color: #98a3a0; font-variant-numeric: tabular-nums; }
+    .t-photo {
+      flex: none; width: 20px; height: 20px; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      background: linear-gradient(135deg,#0d9488,#06b6d4);
+    }
+    .progress-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .progress-track { flex: 1; height: 5px; border-radius: 3px; background: #eceeeb; overflow: hidden; }
+    .progress-fill { height: 100%; width: 50%; border-radius: 3px; background: linear-gradient(90deg,#0d9488,#14b8a6); }
+    .progress-label { font-size: 0.66rem; color: #5b6763; font-variant-numeric: tabular-nums; }
+    .bubble.confirm {
+      align-self: flex-start;
+      background: #DCF7C5;
+      border-top-left-radius: 10px;
+      font-size: 0.76rem;
+      color: #1f3b12;
+    }
+    .caption {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      margin-top: 1.25rem;
+      max-width: 320px;
+    }
+
     /* FEATURES */
     .features { background: var(--background); }
     .feature-grid {
@@ -255,7 +412,7 @@
     .feature {
       background: var(--surface);
       padding: 1.75rem;
-      border-radius: 0.75rem; /* rounded-xl */
+      border-radius: 0.75rem;
       box-shadow: var(--shadow-card);
       transition: box-shadow 0.3s var(--ease-opal), transform 0.3s var(--ease-opal);
     }
@@ -264,11 +421,12 @@
       box-shadow: var(--shadow-card-hover);
     }
     .feature .marker {
-      width: 28px; height: 28px;
+      width: 30px; height: 30px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 1rem;
+      font-size: 1.15rem;
     }
     .feature h3 {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -284,45 +442,19 @@
       line-height: 1.6;
     }
 
-    /* TESTIMONIALS */
-    .testimonials { background: var(--surface); }
-    .t-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-top: 3rem;
-    }
-    .t {
-      background: var(--background);
-      padding: 1.75rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
-    }
-    .t-quote {
-      font-size: 1.0625rem;
-      line-height: 1.55;
-      color: var(--gray-800);
-      margin-bottom: 1.25rem;
-    }
-    .t-author {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--gray-900);
-    }
-    .t-role {
-      font-size: 0.8125rem;
-      color: var(--gray-400);
-      margin-top: 0.25rem;
-    }
-
     /* CTA block */
     .cta-block {
       background: var(--background);
       text-align: center;
       border-top: 1px solid var(--border);
     }
-    .cta-block .section-sub { margin: 0 auto 2rem; }
+    .cta-block .section-sub { margin: 0 auto 1.25rem; }
+    .price-line {
+      font-size: 0.95rem;
+      color: var(--gray-400);
+      margin-top: 1.5rem;
+    }
+    .price-line strong { color: var(--gray-800); font-weight: 600; }
 
     /* FOOTER */
     footer {
@@ -369,27 +501,27 @@
     </svg>
   </div>
   <div class="links">
-    <a href="#features">Features</a>
-    <a href="#testimonials">Households</a>
+    <a href="#how" class="nav-hide">How it works</a>
+    <a href="#features" class="nav-hide">Features</a>
     <a href="mailto:support@helper-sync.com">Contact</a>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="eyebrow">Coming soon · Singapore</div>
+    <div class="eyebrow"><span class="dot"></span>Private beta · Singapore</div>
     <h1 class="hero-title">
       The home runs itself.
       <span class="em">You don't have to.</span>
     </h1>
     <p class="hero-sub">
-      Plan your helper's week by voice. Share every task in her language. Track each one with a photo. Built for Singapore households.
+      Set your helper's week once. She gets each task on WhatsApp — in her own language — and ticks it off with a photo. You see the whole day get done, without asking.
     </p>
     <div class="hero-cta">
-      <a href="mailto:support@helper-sync.com?subject=HelperSync%20early%20access" class="btn btn-primary">
+      <a href="mailto:support@helper-sync.com?subject=HelperSync%20early%20access&body=Hi%20HelperSync%20team%2C%20I%27d%20like%20early%20access." class="btn btn-primary">
         Request early access <span class="arrow">→</span>
       </a>
-      <a href="#reality" class="btn btn-ghost">See the numbers</a>
+      <a href="#how" class="btn btn-ghost">See how it works</a>
     </div>
   </div>
 </section>
@@ -405,103 +537,146 @@
   </div>
 </section>
 
-<section id="features" class="block features">
+<section id="how" class="block how">
   <div class="container">
-    <div class="eyebrow">What you get</div>
-    <h2 class="section-title">Every task — in their language.</h2>
-    <p class="section-sub">Every task ticked off. Every photo saved. Every priority shared. Same year. Completely different feeling.</p>
+    <div class="eyebrow">How it works</div>
+    <h2 class="section-title">Set it once. She gets it. You see it done.</h2>
+    <p class="section-sub">No new app for your helper to learn, no standing over a shoulder. Just the plan — in her language, on the app she already uses.</p>
 
-    <div class="feature-grid">
-      <div class="feature">
-        <span class="marker">
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 0 L3 6"   stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M11 3 L7 8"  stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M15 10 L9 11" stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Your Monday, drafted</h3>
-        <p>Tell HelperSync about your Monday. We'll handle the rest of the week — 10 minutes in, you're done.</p>
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>You set the week once — in English</h3>
+            <p>Pick the tasks that matter and the few fixed times. HelperSync builds the whole week around them. About ten minutes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>She gets it on WhatsApp, in her language</h3>
+            <p>Every task arrives on her WhatsApp in Tagalog, Bahasa Indonesia, Tamil or Burmese — nothing to install, nothing to learn.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Each task is ticked off with a photo</h3>
+            <p>She taps done and sends a photo. It lands on your dashboard the moment it happens — one calm view for you, your spouse, the in-laws.</p>
+          </div>
+        </div>
       </div>
-      <div class="feature">
-        <span class="marker">
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 0 L3 6"   stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M11 3 L7 8"  stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M15 10 L9 11" stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Her language, every task</h3>
-        <p>Tasks land in Tagalog, Bahasa, Burmese, Hindi or Bengali — the language your helper actually thinks in.</p>
-      </div>
-      <div class="feature">
-        <span class="marker">
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 0 L3 6"   stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M11 3 L7 8"  stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M15 10 L9 11" stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Every photo saved</h3>
-        <p>Each task ticked off with a photo and a timestamp. See what got done — without standing over a shoulder.</p>
-      </div>
-      <div class="feature">
-        <span class="marker">
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 0 L3 6"   stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M11 3 L7 8"  stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M15 10 L9 11" stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Every priority shared</h3>
-        <p>Spouse, in-laws, siblings — one view of the week. No more 30 WhatsApps about the kids' schedule.</p>
-      </div>
-      <div class="feature">
-        <span class="marker">
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 0 L3 6"   stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M11 3 L7 8"  stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M15 10 L9 11" stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Meds that don't slip</h3>
-        <p>Grandma's 4pm tablet, the baby's vitamin drops — required photo, exact timestamp, no guessing.</p>
-      </div>
-      <div class="feature">
-        <span class="marker">
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 0 L3 6"   stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M11 3 L7 8"  stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-            <path d="M15 10 L9 11" stroke="#0d9488" stroke-width="2.25" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>1% of helper cost</h3>
-        <p>S$14.99/month, or S$119.90/year. A fraction of what you already spend to make the home run.</p>
+
+      <div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="wa-header">
+                <div class="wa-avatar">📋</div>
+                <div>
+                  <div class="wa-name">HelperSync</div>
+                  <div class="wa-status">online</div>
+                </div>
+              </div>
+              <div class="wa-body">
+                <div class="bubble intro">
+                  <strong>Magandang umaga, Maria! 👋</strong><br>
+                  Narito ang iyong plano para ngayong araw 👇
+                  <span class="time">7:00 AM</span>
+                </div>
+                <div class="bubble">
+                  <div class="list-title">I-tap ang bawat gawain kapag tapos na</div>
+                  <div class="checklist">
+                    <div class="task done">
+                      <div class="tick">✓</div>
+                      <div class="t-name">Almusal</div>
+                      <div class="t-photo">🍳</div>
+                      <div class="t-time">7:30</div>
+                    </div>
+                    <div class="task done">
+                      <div class="tick">✓</div>
+                      <div class="t-name">Paghahatid sa paaralan</div>
+                      <div class="t-time">8:00</div>
+                    </div>
+                    <div class="task done">
+                      <div class="tick">✓</div>
+                      <div class="t-name">Maglaba</div>
+                      <div class="t-photo">🧺</div>
+                      <div class="t-time">10:00</div>
+                    </div>
+                    <div class="task">
+                      <div class="tick">✓</div>
+                      <div class="t-name">Tanghalian — pahinga</div>
+                      <div class="t-time">12:00</div>
+                    </div>
+                    <div class="task">
+                      <div class="tick">✓</div>
+                      <div class="t-name">Gamot ni lola</div>
+                      <div class="t-time">16:00</div>
+                    </div>
+                    <div class="task">
+                      <div class="tick">✓</div>
+                      <div class="t-name">Hapunan</div>
+                      <div class="t-time">18:30</div>
+                    </div>
+                  </div>
+                  <div class="progress-row">
+                    <div class="progress-track"><div class="progress-fill"></div></div>
+                    <div class="progress-label">3/6 tapos</div>
+                  </div>
+                  <span class="time">7:01 AM</span>
+                </div>
+                <div class="bubble confirm">
+                  📸 Natanggap ang litrato para sa Almusal — tapos na! ✅
+                  <span class="time">7:34 AM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">Maria sees her plan in Tagalog. You set it once in English — and watch each ✅ land on your dashboard.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="testimonials" class="block testimonials">
+<section id="features" class="block features">
   <div class="container">
-    <div class="eyebrow">Singapore households</div>
-    <h2 class="section-title">Built for the way you actually live, lah.</h2>
+    <div class="eyebrow">What you get</div>
+    <h2 class="section-title">Everything that never gets said out loud — handled.</h2>
+    <p class="section-sub">The plan, the language, the proof, the priorities. Same year of work. Completely different feeling.</p>
 
-    <div class="t-grid">
-      <div class="t">
-        <p class="t-quote">"I stopped repeating myself five times a day. Maria knows what to do on every weekday now — in her own language."</p>
-        <div class="t-author">Priya, 38</div>
-        <div class="t-role">Working mum of two, Bukit Timah</div>
+    <div class="feature-grid">
+      <div class="feature">
+        <span class="marker">🗒️</span>
+        <h3>Your week, drafted in minutes</h3>
+        <p>Choose the tasks that matter and set the few fixed times. HelperSync builds the whole week around them — about ten minutes, and you're done.</p>
       </div>
-      <div class="t">
-        <p class="t-quote">"My wife and I were sending each other 30 WhatsApps a day about the kids' schedule. Now it's just there. Quiet."</p>
-        <div class="t-author">Jason, 41</div>
-        <div class="t-role">Dad of three, Tampines</div>
+      <div class="feature">
+        <span class="marker">💬</span>
+        <h3>Her language, over WhatsApp</h3>
+        <p>Every task lands on her WhatsApp in Tagalog, Bahasa Indonesia, Tamil or Burmese — the language she actually thinks in. Nothing new to install.</p>
       </div>
-      <div class="t">
-        <p class="t-quote">"My mother-in-law lives with us. Now she can see the helper's day, add her own notes, and we don't argue about timing anymore."</p>
-        <div class="t-author">Michelle, 35</div>
-        <div class="t-role">Multi-gen household, Bishan</div>
+      <div class="feature">
+        <span class="marker">📸</span>
+        <h3>Proof, not nagging</h3>
+        <p>She ticks each task off with a photo and a timestamp. See what got done — without standing over a shoulder or asking twice.</p>
+      </div>
+      <div class="feature">
+        <span class="marker">📊</span>
+        <h3>Live on your dashboard</h3>
+        <p>The moment she taps done, it appears on your dashboard. One calm view of the day — shared with your spouse and the in-laws, so nobody re-asks.</p>
+      </div>
+      <div class="feature">
+        <span class="marker">💊</span>
+        <h3>Meds that don't slip</h3>
+        <p>Grandma's 4pm tablet, the baby's vitamin drops — a required photo at the exact time, so the things that matter most never get missed.</p>
+      </div>
+      <div class="feature">
+        <span class="marker">🔄</span>
+        <h3>Rebalances when life happens</h3>
+        <p>A delivery, a sick kid, a plumber at the door. Report it once and the day quietly reshuffles around the things that can't move.</p>
       </div>
     </div>
   </div>
@@ -511,10 +686,11 @@
   <div class="container-tight">
     <div class="eyebrow">First step</div>
     <h2 class="section-title">Tell HelperSync about your Monday.</h2>
-    <p class="section-sub">We'll handle the rest of the week. Email us — we'll add you to the TestFlight beta the day it opens.</p>
+    <p class="section-sub">We'll handle the rest of the week. Email us and we'll add you to the private beta.</p>
     <a href="mailto:support@helper-sync.com?subject=HelperSync%20early%20access&body=Hi%20HelperSync%20team%2C%20I%27d%20like%20early%20access." class="btn btn-primary">
       support@helper-sync.com <span class="arrow">→</span>
     </a>
+    <p class="price-line"><strong>S$10.83/month</strong>, billed yearly (save 45%) — or S$19.98 monthly. About 1% of what a helper costs to employ.</p>
   </div>
 </section>
 
